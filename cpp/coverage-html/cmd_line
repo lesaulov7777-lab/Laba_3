@@ -1,0 +1,1 @@
+genhtml build-cov/lab3.info --output-directory coverage-html --ignore-errors inconsistent,format -q

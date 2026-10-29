@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - lab3.info - src/MyArray.cpp</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html" title="Click to go to top-level">top level</a> - <a href="index.html" title="Click to go to directory src">src</a> - MyArray.cpp<span style="font-size: 80%;"> (source / <a href="MyArray.cpp.func-c.html" title="Click to go to function table">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">lab3.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">71</td>
+            <td class="headerCovTableEntry">71</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2026-10-29 21:07:45</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">94.7&nbsp;%</td>
+            <td class="headerCovTableEntry">19</td>
+            <td class="headerCovTableEntry">18</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : #include &quot;MyArray.h&quot;</span>
+<span id="L2"><span class="lineNum">       2</span>              : </span>
+<span id="L3"><span class="lineNum">       3</span>              : #include &lt;stdexcept&gt;</span>
+<span id="L4"><span class="lineNum">       4</span>              : #include &lt;utility&gt;</span>
+<span id="L5"><span class="lineNum">       5</span>              : </span>
+<span id="L6"><span class="lineNum">       6</span>              : namespace lr3 {</span>
+<span id="L7"><span class="lineNum">       7</span>              : </span>
+<span id="L8"><span class="lineNum">       8</span> <span class="tlaGNC">          50 : MyArray::MyArray(std::size_t initialCapacity)</span></span>
+<span id="L9"><span class="lineNum">       9</span> <span class="tlaGNC">          50 :     : data_(nullptr), capacity_(initialCapacity == 0 ? 1 : initialCapacity), size_(0) {</span></span>
+<span id="L10"><span class="lineNum">      10</span> <span class="tlaGNC">          25 :     data_ = new std::string[capacity_];</span></span>
+<span id="L11"><span class="lineNum">      11</span> <span class="tlaGNC">          50 : }</span></span>
+<span id="L12"><span class="lineNum">      12</span>              : </span>
+<span id="L13"><span class="lineNum">      13</span> <span class="tlaGNC">           4 : MyArray::MyArray(const MyArray&amp; other) : data_(new std::string[other.capacity_]), capacity_(other.capacity_), size_(other.size_) {</span></span>
+<span id="L14"><span class="lineNum">      14</span> <span class="tlaGNC">           7 :     for (std::size_t i = 0; i &lt; size_; ++i) data_[i] = other.data_[i];</span></span>
+<span id="L15"><span class="lineNum">      15</span> <span class="tlaGNC">           4 : }</span></span>
+<span id="L16"><span class="lineNum">      16</span>              : </span>
+<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">           2 : MyArray::MyArray(MyArray&amp;&amp; other) noexcept : data_(other.data_), capacity_(other.capacity_), size_(other.size_) {</span></span>
+<span id="L18"><span class="lineNum">      18</span> <span class="tlaGNC">           1 :     other.data_ = nullptr;</span></span>
+<span id="L19"><span class="lineNum">      19</span> <span class="tlaGNC">           1 :     other.capacity_ = 0;</span></span>
+<span id="L20"><span class="lineNum">      20</span> <span class="tlaGNC">           1 :     other.size_ = 0;</span></span>
+<span id="L21"><span class="lineNum">      21</span> <span class="tlaGNC">           2 : }</span></span>
+<span id="L22"><span class="lineNum">      22</span>              : </span>
+<span id="L23"><span class="lineNum">      23</span> <span class="tlaGNC">           2 : MyArray&amp; MyArray::operator=(const MyArray&amp; other) {</span></span>
+<span id="L24"><span class="lineNum">      24</span> <span class="tlaGNC">           2 :     if (this == &amp;other) return *this;</span></span>
+<span id="L25"><span class="lineNum">      25</span> <span class="tlaGNC">           1 :     MyArray copy(other);</span></span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC">           1 :     *this = std::move(copy);</span></span>
+<span id="L27"><span class="lineNum">      27</span> <span class="tlaGNC">           1 :     return *this;</span></span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">           2 : }</span></span>
+<span id="L29"><span class="lineNum">      29</span>              : </span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">           3 : MyArray&amp; MyArray::operator=(MyArray&amp;&amp; other) noexcept {</span></span>
+<span id="L31"><span class="lineNum">      31</span> <span class="tlaGNC">           3 :     if (this == &amp;other) return *this;</span></span>
+<span id="L32"><span class="lineNum">      32</span> <span class="tlaGNC">           2 :     delete[] data_;</span></span>
+<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">           2 :     data_ = other.data_;</span></span>
+<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">           2 :     capacity_ = other.capacity_;</span></span>
+<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">           2 :     size_ = other.size_;</span></span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">           2 :     other.data_ = nullptr;</span></span>
+<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">           2 :     other.capacity_ = 0;</span></span>
+<span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">           2 :     other.size_ = 0;</span></span>
+<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">           2 :     return *this;</span></span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">           3 : }</span></span>
+<span id="L41"><span class="lineNum">      41</span>              : </span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">          56 : MyArray::~MyArray() { delete[] data_; }</span></span>
+<span id="L43"><span class="lineNum">      43</span>              : </span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">          68 : void MyArray::grow() {</span></span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">          68 :     if (data_ != nullptr &amp;&amp; size_ &lt; capacity_) return;</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">          20 :     const std::size_t newCap = capacity_ == 0 ? 2 : capacity_ * 2;</span></span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">          20 :     std::string* fresh = new std::string[newCap];</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">          77 :     for (std::size_t i = 0; i &lt; size_; ++i) fresh[i] = std::move(data_[i]);  // NOLINT(clang-analyzer-core.NonNullParamChecker)</span></span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">          20 :     delete[] data_;</span></span>
+<span id="L50"><span class="lineNum">      50</span> <span class="tlaGNC">          20 :     data_ = fresh;</span></span>
+<span id="L51"><span class="lineNum">      51</span> <span class="tlaGNC">          20 :     capacity_ = newCap;</span></span>
+<span id="L52"><span class="lineNum">      52</span> <span class="tlaGNC">          68 : }</span></span>
+<span id="L53"><span class="lineNum">      53</span>              : </span>
+<span id="L54"><span class="lineNum">      54</span> <span class="tlaGNC">           8 : void MyArray::checkIndex(std::size_t index) const {</span></span>
+<span id="L55"><span class="lineNum">      55</span> <span class="tlaGNC">           8 :     if (index &gt;= size_) throw std::out_of_range(&quot;MyArray: index out of range&quot;);</span></span>
+<span id="L56"><span class="lineNum">      56</span> <span class="tlaGNC">           5 : }</span></span>
+<span id="L57"><span class="lineNum">      57</span>              : </span>
+<span id="L58"><span class="lineNum">      58</span> <span class="tlaGNC">          65 : void MyArray::pushBack(const std::string&amp; value) {</span></span>
+<span id="L59"><span class="lineNum">      59</span> <span class="tlaGNC">          65 :     grow();</span></span>
+<span id="L60"><span class="lineNum">      60</span> <span class="tlaGNC">          65 :     data_[size_++] = value;</span></span>
+<span id="L61"><span class="lineNum">      61</span> <span class="tlaGNC">          65 : }</span></span>
+<span id="L62"><span class="lineNum">      62</span>              : </span>
+<span id="L63"><span class="lineNum">      63</span> <span class="tlaGNC">           4 : void MyArray::insertAt(std::size_t index, const std::string&amp; value) {</span></span>
+<span id="L64"><span class="lineNum">      64</span> <span class="tlaGNC">           4 :     if (index &gt; size_) throw std::out_of_range(&quot;MyArray: index out of range&quot;);</span></span>
+<span id="L65"><span class="lineNum">      65</span> <span class="tlaGNC">           3 :     grow();</span></span>
+<span id="L66"><span class="lineNum">      66</span> <span class="tlaGNC">           8 :     for (std::size_t i = size_; i &gt; index; --i) data_[i] = std::move(data_[i - 1]);  // NOLINT(clang-analyzer-security.ArrayBound)</span></span>
+<span id="L67"><span class="lineNum">      67</span> <span class="tlaGNC">           3 :     data_[index] = value;</span></span>
+<span id="L68"><span class="lineNum">      68</span> <span class="tlaGNC">           3 :     ++size_;</span></span>
+<span id="L69"><span class="lineNum">      69</span> <span class="tlaGNC">           3 : }</span></span>
+<span id="L70"><span class="lineNum">      70</span>              : </span>
+<span id="L71"><span class="lineNum">      71</span> <span class="tlaGNC">           3 : const std::string&amp; MyArray::getAt(std::size_t index) const {</span></span>
+<span id="L72"><span class="lineNum">      72</span> <span class="tlaGNC">           3 :     checkIndex(index);</span></span>
+<span id="L73"><span class="lineNum">      73</span> <span class="tlaGNC">           3 :     return data_[index];</span></span>
+<span id="L74"><span class="lineNum">      74</span>              : }</span>
+<span id="L75"><span class="lineNum">      75</span>              : </span>
+<span id="L76"><span class="lineNum">      76</span> <span class="tlaGNC">           2 : void MyArray::setAt(std::size_t index, const std::string&amp; value) {</span></span>
+<span id="L77"><span class="lineNum">      77</span> <span class="tlaGNC">           2 :     checkIndex(index);</span></span>
+<span id="L78"><span class="lineNum">      78</span> <span class="tlaGNC">           2 :     data_[index] = value;</span></span>
+<span id="L79"><span class="lineNum">      79</span> <span class="tlaGNC">           2 : }</span></span>
+<span id="L80"><span class="lineNum">      80</span>              : </span>
+<span id="L81"><span class="lineNum">      81</span> <span class="tlaGNC">           3 : void MyArray::removeAt(std::size_t index) {</span></span>
+<span id="L82"><span class="lineNum">      82</span> <span class="tlaGNC">           3 :     checkIndex(index);</span></span>
+<span id="L83"><span class="lineNum">      83</span> <span class="tlaGNC">           6 :     for (std::size_t i = index; i + 1 &lt; size_; ++i) data_[i] = std::move(data_[i + 1]);  // NOLINT(clang-analyzer-security.ArrayBound)</span></span>
+<span id="L84"><span class="lineNum">      84</span> <span class="tlaGNC">           3 :     --size_;</span></span>
+<span id="L85"><span class="lineNum">      85</span> <span class="tlaGNC">           3 : }</span></span>
+<span id="L86"><span class="lineNum">      86</span>              : </span>
+<span id="L87"><span class="lineNum">      87</span> <span class="tlaGNC">          20 : std::vector&lt;std::string&gt; MyArray::toVector() const {</span></span>
+<span id="L88"><span class="lineNum">      88</span> <span class="tlaGNC">          20 :     std::vector&lt;std::string&gt; out;</span></span>
+<span id="L89"><span class="lineNum">      89</span> <span class="tlaGNC">          20 :     out.reserve(size_);</span></span>
+<span id="L90"><span class="lineNum">      90</span> <span class="tlaGNC">         101 :     for (std::size_t i = 0; i &lt; size_; ++i) out.push_back(data_[i]);</span></span>
+<span id="L91"><span class="lineNum">      91</span> <span class="tlaGNC">          20 :     return out;</span></span>
+<span id="L92"><span class="lineNum">      92</span> <span class="tlaGNC">          20 : }</span></span>
+<span id="L93"><span class="lineNum">      93</span>              : </span>
+<span id="L94"><span class="lineNum">      94</span>              : }  // namespace lr3</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com/linux-test-project/lcov" target="_parent">LCOV version 2.6-0</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>
