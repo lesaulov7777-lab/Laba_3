@@ -1,0 +1,1098 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>ds: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">lab3/ds/array.go (100.0%)</option>
+				
+				<option value="file1">lab3/ds/container.go (99.0%)</option>
+				
+				<option value="file2">lab3/ds/doubly_list.go (97.9%)</option>
+				
+				<option value="file3">lab3/ds/hashtable.go (100.0%)</option>
+				
+				<option value="file4">lab3/ds/singly_list.go (98.2%)</option>
+				
+				<option value="file5">lab3/ds/stack_queue.go (100.0%)</option>
+				
+				<option value="file6">lab3/ds/tree.go (98.8%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package ds
+
+// MyArray - динамический массив строк с удвоением ёмкости.
+type MyArray struct {
+        data []string
+        size int
+}
+
+// NewMyArray создаёт массив с начальной ёмкостью capacity (минимум 1).
+func NewMyArray(capacity int) *MyArray <span class="cov8" title="1">{
+        if capacity &lt; 1 </span><span class="cov8" title="1">{
+                capacity = 1
+        }</span>
+        <span class="cov8" title="1">return &amp;MyArray{data: make([]string, capacity)}</span>
+}
+
+func (a *MyArray) TypeName() string <span class="cov8" title="1">{ return "MyArray" }</span>
+func (a *MyArray) Size() int        <span class="cov8" title="1">{ return a.size }</span>
+func (a *MyArray) Capacity() int    <span class="cov8" title="1">{ return len(a.data) }</span>
+func (a *MyArray) Clear()           <span class="cov8" title="1">{ a.size = 0 }</span>
+
+func (a *MyArray) grow() <span class="cov8" title="1">{
+        if a.size &lt; len(a.data) </span><span class="cov8" title="1">{
+                return
+        }</span>
+        <span class="cov8" title="1">n := len(a.data) * 2
+        if n == 0 </span><span class="cov8" title="1">{
+                n = 2
+        }</span>
+        <span class="cov8" title="1">fresh := make([]string, n)
+        copy(fresh, a.data[:a.size])
+        a.data = fresh</span>
+}
+
+// PushBack добавляет элемент в конец.
+func (a *MyArray) PushBack(v string) <span class="cov8" title="1">{
+        a.grow()
+        a.data[a.size] = v
+        a.size++
+}</span>
+
+// InsertAt вставляет элемент по индексу (index == Size() допустим).
+func (a *MyArray) InsertAt(index int, v string) error <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt; a.size </span><span class="cov8" title="1">{
+                return ErrIndex
+        }</span>
+        <span class="cov8" title="1">a.grow()
+        copy(a.data[index+1:a.size+1], a.data[index:a.size])
+        a.data[index] = v
+        a.size++
+        return nil</span>
+}
+
+// GetAt возвращает элемент по индексу.
+func (a *MyArray) GetAt(index int) (string, error) <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt;= a.size </span><span class="cov8" title="1">{
+                return "", ErrIndex
+        }</span>
+        <span class="cov8" title="1">return a.data[index], nil</span>
+}
+
+// SetAt заменяет элемент по индексу.
+func (a *MyArray) SetAt(index int, v string) error <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt;= a.size </span><span class="cov8" title="1">{
+                return ErrIndex
+        }</span>
+        <span class="cov8" title="1">a.data[index] = v
+        return nil</span>
+}
+
+// RemoveAt удаляет элемент по индексу.
+func (a *MyArray) RemoveAt(index int) error <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt;= a.size </span><span class="cov8" title="1">{
+                return ErrIndex
+        }</span>
+        <span class="cov8" title="1">copy(a.data[index:], a.data[index+1:a.size])
+        a.size--
+        a.data[a.size] = ""
+        return nil</span>
+}
+
+func (a *MyArray) ToSlice() []string <span class="cov8" title="1">{
+        out := make([]string, a.size)
+        copy(out, a.data[:a.size])
+        return out
+}</span>
+
+func (a *MyArray) Append(v string) error <span class="cov8" title="1">{
+        a.PushBack(v)
+        return nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">// Package ds содержит структуры данных ЛР3 (Go-версия) и их сериализацию.
+//
+// Форматы файлов совпадают с C++-версией:
+//
+//        бинарный: "LR3B" | u8 len(typeName) | typeName | u32 count | count * (u32 len | bytes)  (little-endian)
+//        текстовый: "LR3T &lt;typeName&gt; &lt;count&gt;\n" и по одной строке на элемент (\\ \n \r экранируются)
+package ds
+
+import (
+        "bufio"
+        "bytes"
+        "encoding/binary"
+        "errors"
+        "fmt"
+        "io"
+        "strconv"
+        "strings"
+)
+
+// ErrEmpty возвращается при чтении из пустой структуры.
+var ErrEmpty = errors.New("ds: container is empty")
+
+// ErrIndex возвращается при обращении по индексу вне диапазона.
+var ErrIndex = errors.New("ds: index out of range")
+
+const (
+        magicBin  = "LR3B"
+        magicText = "LR3T"
+        maxLen    = 64 * 1024 * 1024
+)
+
+// Container - общий интерфейс всех структур; сериализация строится на его пяти методах.
+type Container interface {
+        TypeName() string
+        Size() int
+        ToSlice() []string // порядок, достаточный для восстановления
+        Clear()
+        Append(value string) error // добавление при десериализации
+}
+
+// SaveBinary записывает контейнер в бинарном формате.
+func SaveBinary(c Container, w io.Writer) error <span class="cov8" title="1">{
+        name := c.TypeName()
+        items := c.ToSlice()
+        var buf bytes.Buffer
+        buf.WriteString(magicBin)
+        buf.WriteByte(byte(len(name)))
+        buf.WriteString(name)
+        var u [4]byte
+        binary.LittleEndian.PutUint32(u[:], uint32(len(items)))
+        buf.Write(u[:])
+        for _, s := range items </span><span class="cov8" title="1">{
+                binary.LittleEndian.PutUint32(u[:], uint32(len(s)))
+                buf.Write(u[:])
+                buf.WriteString(s)
+        }</span>
+        <span class="cov8" title="1">_, err := w.Write(buf.Bytes())
+        return err</span>
+}
+
+// LoadBinary заменяет содержимое контейнера данными из бинарного потока.
+// При ошибке контейнер не изменяется.
+func LoadBinary(c Container, r io.Reader) error <span class="cov8" title="1">{
+        magic := make([]byte, 4)
+        if _, err := io.ReadFull(r, magic); err != nil || string(magic) != magicBin </span><span class="cov8" title="1">{
+                return errors.New("ds: bad binary magic")
+        }</span>
+        <span class="cov8" title="1">var nameLen [1]byte
+        if _, err := io.ReadFull(r, nameLen[:]); err != nil </span><span class="cov8" title="1">{
+                return fmt.Errorf("ds: unexpected end of binary data: %w", err)
+        }</span>
+        <span class="cov8" title="1">name := make([]byte, nameLen[0])
+        if _, err := io.ReadFull(r, name); err != nil </span><span class="cov8" title="1">{
+                return fmt.Errorf("ds: unexpected end of binary data: %w", err)
+        }</span>
+        <span class="cov8" title="1">if string(name) != c.TypeName() </span><span class="cov8" title="1">{
+                return fmt.Errorf("ds: type mismatch: file has %s, expected %s", name, c.TypeName())
+        }</span>
+        <span class="cov8" title="1">count, err := readU32(r)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">var items []string
+        for i := uint32(0); i &lt; count; i++ </span><span class="cov8" title="1">{
+                n, err := readU32(r)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">if n &gt; maxLen </span><span class="cov8" title="1">{
+                        return errors.New("ds: element too large")
+                }</span>
+                <span class="cov8" title="1">b := make([]byte, n)
+                if _, err := io.ReadFull(r, b); err != nil </span><span class="cov8" title="1">{
+                        return fmt.Errorf("ds: unexpected end of binary data: %w", err)
+                }</span>
+                <span class="cov8" title="1">items = append(items, string(b))</span>
+        }
+        <span class="cov8" title="1">return replace(c, items)</span>
+}
+
+func readU32(r io.Reader) (uint32, error) <span class="cov8" title="1">{
+        var b [4]byte
+        if _, err := io.ReadFull(r, b[:]); err != nil </span><span class="cov8" title="1">{
+                return 0, fmt.Errorf("ds: unexpected end of binary data: %w", err)
+        }</span>
+        <span class="cov8" title="1">return binary.LittleEndian.Uint32(b[:]), nil</span>
+}
+
+// SaveText записывает контейнер в текстовом формате.
+func SaveText(c Container, w io.Writer) error <span class="cov8" title="1">{
+        items := c.ToSlice()
+        var sb strings.Builder
+        fmt.Fprintf(&amp;sb, "%s %s %d\n", magicText, c.TypeName(), len(items))
+        for _, s := range items </span><span class="cov8" title="1">{
+                sb.WriteString(escape(s))
+                sb.WriteByte('\n')
+        }</span>
+        <span class="cov8" title="1">_, err := io.WriteString(w, sb.String())
+        return err</span>
+}
+
+// LoadText заменяет содержимое контейнера данными из текстового потока.
+func LoadText(c Container, r io.Reader) error <span class="cov8" title="1">{
+        br := bufio.NewReader(r)
+        header, err := br.ReadString('\n')
+        if err != nil &amp;&amp; header == "" </span><span class="cov8" title="1">{
+                return errors.New("ds: bad text header")
+        }</span>
+        <span class="cov8" title="1">fields := strings.Fields(header)
+        if len(fields) != 3 || fields[0] != magicText </span><span class="cov8" title="1">{
+                return errors.New("ds: bad text header")
+        }</span>
+        <span class="cov8" title="1">if fields[1] != c.TypeName() </span><span class="cov8" title="1">{
+                return fmt.Errorf("ds: type mismatch: file has %s, expected %s", fields[1], c.TypeName())
+        }</span>
+        <span class="cov8" title="1">count, err := strconv.Atoi(fields[2])
+        if err != nil || count &lt; 0 </span><span class="cov8" title="1">{
+                return errors.New("ds: bad text header")
+        }</span>
+        <span class="cov8" title="1">var items []string
+        for i := 0; i &lt; count; i++ </span><span class="cov8" title="1">{
+                line, err := br.ReadString('\n')
+                if err != nil </span><span class="cov8" title="1">{
+                        return errors.New("ds: unexpected end of text data")
+                }</span>
+                <span class="cov8" title="1">s, err := unescape(strings.TrimSuffix(line, "\n"))
+                if err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">items = append(items, s)</span>
+        }
+        <span class="cov8" title="1">return replace(c, items)</span>
+}
+
+// replace атомарно (с откатом) подменяет содержимое контейнера.
+func replace(c Container, items []string) error <span class="cov8" title="1">{
+        backup := c.ToSlice()
+        c.Clear()
+        for _, s := range items </span><span class="cov8" title="1">{
+                if err := c.Append(s); err != nil </span><span class="cov8" title="1">{
+                        c.Clear()
+                        for _, old := range backup </span><span class="cov8" title="1">{
+                                _ = c.Append(old)
+                        }</span>
+                        <span class="cov8" title="1">return err</span>
+                }
+        }
+        <span class="cov8" title="1">return nil</span>
+}
+
+func escape(s string) string <span class="cov8" title="1">{
+        r := strings.NewReplacer(`\`, `\\`, "\n", `\n`, "\r", `\r`)
+        return r.Replace(s)
+}</span>
+
+func unescape(s string) (string, error) <span class="cov8" title="1">{
+        var sb strings.Builder
+        for i := 0; i &lt; len(s); i++ </span><span class="cov8" title="1">{
+                if s[i] != '\\' </span><span class="cov8" title="1">{
+                        sb.WriteByte(s[i])
+                        continue</span>
+                }
+                <span class="cov8" title="1">i++
+                if i &gt;= len(s) </span><span class="cov8" title="1">{
+                        return "", errors.New("ds: dangling escape in text data")
+                }</span>
+                <span class="cov8" title="1">switch s[i] </span>{
+                case '\\':<span class="cov8" title="1">
+                        sb.WriteByte('\\')</span>
+                case 'n':<span class="cov8" title="1">
+                        sb.WriteByte('\n')</span>
+                case 'r':<span class="cov8" title="1">
+                        sb.WriteByte('\r')</span>
+                default:<span class="cov8" title="1">
+                        return "", errors.New("ds: unknown escape in text data")</span>
+                }
+        }
+        <span class="cov8" title="1">return sb.String(), nil</span>
+}
+
+// Format выводит содержимое в виде "[a, b, c]".
+func Format(c Container) string <span class="cov8" title="1">{
+        return "[" + strings.Join(c.ToSlice(), ", ") + "]"
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package ds
+
+type doublyNode struct {
+        value      string
+        next, prev *doublyNode
+}
+
+// DoublyLinkedList - двусвязный список.
+type DoublyLinkedList struct {
+        head, tail *doublyNode
+        size       int
+}
+
+func (l *DoublyLinkedList) TypeName() string <span class="cov8" title="1">{ return "DoublyLinkedList" }</span>
+func (l *DoublyLinkedList) Size() int        <span class="cov8" title="1">{ return l.size }</span>
+func (l *DoublyLinkedList) Clear()           <span class="cov8" title="1">{ l.head, l.tail, l.size = nil, nil, 0 }</span>
+
+func (l *DoublyLinkedList) PushFront(v string) <span class="cov8" title="1">{
+        n := &amp;doublyNode{value: v, next: l.head}
+        if l.head != nil </span><span class="cov8" title="1">{
+                l.head.prev = n
+        }</span>
+        <span class="cov8" title="1">l.head = n
+        if l.tail == nil </span><span class="cov0" title="0">{
+                l.tail = n
+        }</span>
+        <span class="cov8" title="1">l.size++</span>
+}
+
+func (l *DoublyLinkedList) PushBack(v string) <span class="cov8" title="1">{
+        n := &amp;doublyNode{value: v, prev: l.tail}
+        if l.tail != nil </span><span class="cov8" title="1">{
+                l.tail.next = n
+        }</span>
+        <span class="cov8" title="1">l.tail = n
+        if l.head == nil </span><span class="cov8" title="1">{
+                l.head = n
+        }</span>
+        <span class="cov8" title="1">l.size++</span>
+}
+
+func (l *DoublyLinkedList) find(v string) *doublyNode <span class="cov8" title="1">{
+        for n := l.head; n != nil; n = n.next </span><span class="cov8" title="1">{
+                if n.value == v </span><span class="cov8" title="1">{
+                        return n
+                }</span>
+        }
+        <span class="cov8" title="1">return nil</span>
+}
+
+func (l *DoublyLinkedList) unlink(n *doublyNode) <span class="cov8" title="1">{
+        if n.prev != nil </span><span class="cov8" title="1">{
+                n.prev.next = n.next
+        }</span> else<span class="cov8" title="1"> {
+                l.head = n.next
+        }</span>
+        <span class="cov8" title="1">if n.next != nil </span><span class="cov8" title="1">{
+                n.next.prev = n.prev
+        }</span> else<span class="cov8" title="1"> {
+                l.tail = n.prev
+        }</span>
+        <span class="cov8" title="1">l.size--</span>
+}
+
+func (l *DoublyLinkedList) Contains(v string) bool <span class="cov8" title="1">{ return l.find(v) != nil }</span>
+
+func (l *DoublyLinkedList) InsertAfter(target, value string) bool <span class="cov8" title="1">{
+        t := l.find(target)
+        if t == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">n := &amp;doublyNode{value: value, prev: t, next: t.next}
+        if t.next != nil </span><span class="cov8" title="1">{
+                t.next.prev = n
+        }</span> else<span class="cov8" title="1"> {
+                l.tail = n
+        }</span>
+        <span class="cov8" title="1">t.next = n
+        l.size++
+        return true</span>
+}
+
+func (l *DoublyLinkedList) InsertBefore(target, value string) bool <span class="cov8" title="1">{
+        t := l.find(target)
+        if t == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">n := &amp;doublyNode{value: value, next: t, prev: t.prev}
+        if t.prev != nil </span><span class="cov8" title="1">{
+                t.prev.next = n
+        }</span> else<span class="cov8" title="1"> {
+                l.head = n
+        }</span>
+        <span class="cov8" title="1">t.prev = n
+        l.size++
+        return true</span>
+}
+
+func (l *DoublyLinkedList) PopFront() (string, error) <span class="cov8" title="1">{
+        if l.head == nil </span><span class="cov8" title="1">{
+                return "", ErrEmpty
+        }</span>
+        <span class="cov8" title="1">v := l.head.value
+        l.unlink(l.head)
+        return v, nil</span>
+}
+
+func (l *DoublyLinkedList) PopBack() (string, error) <span class="cov8" title="1">{
+        if l.tail == nil </span><span class="cov8" title="1">{
+                return "", ErrEmpty
+        }</span>
+        <span class="cov8" title="1">v := l.tail.value
+        l.unlink(l.tail)
+        return v, nil</span>
+}
+
+func (l *DoublyLinkedList) RemoveByValue(v string) bool <span class="cov8" title="1">{
+        n := l.find(v)
+        if n == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">l.unlink(n)
+        return true</span>
+}
+
+func (l *DoublyLinkedList) RemoveAfter(target string) bool <span class="cov8" title="1">{
+        t := l.find(target)
+        if t == nil || t.next == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">l.unlink(t.next)
+        return true</span>
+}
+
+func (l *DoublyLinkedList) RemoveBefore(target string) bool <span class="cov8" title="1">{
+        t := l.find(target)
+        if t == nil || t.prev == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">l.unlink(t.prev)
+        return true</span>
+}
+
+func (l *DoublyLinkedList) GetAt(index int) (string, error) <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt;= l.size </span><span class="cov8" title="1">{
+                return "", ErrIndex
+        }</span>
+        <span class="cov8" title="1">n := l.head
+        for i := 0; i &lt; index; i++ </span><span class="cov0" title="0">{
+                n = n.next
+        }</span>
+        <span class="cov8" title="1">return n.value, nil</span>
+}
+
+func (l *DoublyLinkedList) Front() (string, error) <span class="cov8" title="1">{
+        if l.head == nil </span><span class="cov8" title="1">{
+                return "", ErrEmpty
+        }</span>
+        <span class="cov8" title="1">return l.head.value, nil</span>
+}
+
+func (l *DoublyLinkedList) Back() (string, error) <span class="cov8" title="1">{
+        if l.tail == nil </span><span class="cov8" title="1">{
+                return "", ErrEmpty
+        }</span>
+        <span class="cov8" title="1">return l.tail.value, nil</span>
+}
+
+func (l *DoublyLinkedList) ToSlice() []string <span class="cov8" title="1">{
+        out := make([]string, 0, l.size)
+        for n := l.head; n != nil; n = n.next </span><span class="cov8" title="1">{
+                out = append(out, n.value)
+        }</span>
+        <span class="cov8" title="1">return out</span>
+}
+
+// ToSliceReversed обходит список от хвоста к голове.
+func (l *DoublyLinkedList) ToSliceReversed() []string <span class="cov8" title="1">{
+        out := make([]string, 0, l.size)
+        for n := l.tail; n != nil; n = n.prev </span><span class="cov8" title="1">{
+                out = append(out, n.value)
+        }</span>
+        <span class="cov8" title="1">return out</span>
+}
+
+func (l *DoublyLinkedList) Append(v string) error <span class="cov8" title="1">{
+        l.PushBack(v)
+        return nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package ds
+
+// Djb2 - хеш-функция DJB2 (h = h*33 + c).
+func Djb2(key string) uint64 <span class="cov8" title="1">{
+        h := uint64(5381)
+        for i := 0; i &lt; len(key); i++ </span><span class="cov8" title="1">{
+                h = h*33 + uint64(key[i])
+        }</span>
+        <span class="cov8" title="1">return h</span>
+}
+
+// HashTable - множество строк на цепочках; расширяется при заполнении &gt; 0.75.
+type HashTable struct {
+        buckets []SinglyLinkedList
+        size    int
+}
+
+// NewHashTable создаёт таблицу с заданным числом корзин (минимум 1).
+func NewHashTable(buckets int) *HashTable <span class="cov8" title="1">{
+        if buckets &lt; 1 </span><span class="cov8" title="1">{
+                buckets = 1
+        }</span>
+        <span class="cov8" title="1">return &amp;HashTable{buckets: make([]SinglyLinkedList, buckets)}</span>
+}
+
+func (h *HashTable) TypeName() string <span class="cov8" title="1">{ return "HashTable" }</span>
+func (h *HashTable) Size() int        <span class="cov8" title="1">{ return h.size }</span>
+func (h *HashTable) BucketCount() int <span class="cov8" title="1">{ return len(h.buckets) }</span>
+
+func (h *HashTable) idx(key string, n int) int <span class="cov8" title="1">{ return int(Djb2(key) % uint64(n)) }</span>
+
+func (h *HashTable) Contains(key string) bool <span class="cov8" title="1">{
+        return h.buckets[h.idx(key, len(h.buckets))].Contains(key)
+}</span>
+
+// Insert возвращает false, если ключ уже есть.
+func (h *HashTable) Insert(key string) bool <span class="cov8" title="1">{
+        if h.Contains(key) </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">if (h.size+1)*4 &gt; len(h.buckets)*3 </span><span class="cov8" title="1">{
+                h.rehash(len(h.buckets) * 2)
+        }</span>
+        <span class="cov8" title="1">h.buckets[h.idx(key, len(h.buckets))].PushFront(key)
+        h.size++
+        return true</span>
+}
+
+func (h *HashTable) Erase(key string) bool <span class="cov8" title="1">{
+        if !h.buckets[h.idx(key, len(h.buckets))].RemoveByValue(key) </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">h.size--
+        return true</span>
+}
+
+func (h *HashTable) rehash(n int) <span class="cov8" title="1">{
+        fresh := make([]SinglyLinkedList, n)
+        for i := range h.buckets </span><span class="cov8" title="1">{
+                for _, k := range h.buckets[i].ToSlice() </span><span class="cov8" title="1">{
+                        fresh[h.idx(k, n)].PushFront(k)
+                }</span>
+        }
+        <span class="cov8" title="1">h.buckets = fresh</span>
+}
+
+// MaxChainLength - длина самой длинной цепочки.
+func (h *HashTable) MaxChainLength() int <span class="cov8" title="1">{
+        m := 0
+        for i := range h.buckets </span><span class="cov8" title="1">{
+                if s := h.buckets[i].Size(); s &gt; m </span><span class="cov8" title="1">{
+                        m = s
+                }</span>
+        }
+        <span class="cov8" title="1">return m</span>
+}
+
+func (h *HashTable) ToSlice() []string <span class="cov8" title="1">{
+        out := make([]string, 0, h.size)
+        for i := range h.buckets </span><span class="cov8" title="1">{
+                out = append(out, h.buckets[i].ToSlice()...)
+        }</span>
+        <span class="cov8" title="1">return out</span>
+}
+
+func (h *HashTable) Clear() <span class="cov8" title="1">{
+        for i := range h.buckets </span><span class="cov8" title="1">{
+                h.buckets[i].Clear()
+        }</span>
+        <span class="cov8" title="1">h.size = 0</span>
+}
+
+func (h *HashTable) Append(v string) error <span class="cov8" title="1">{
+        h.Insert(v)
+        return nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package ds
+
+type singlyNode struct {
+        value string
+        next  *singlyNode
+}
+
+// SinglyLinkedList - односвязный список с указателями на голову и хвост.
+type SinglyLinkedList struct {
+        head, tail *singlyNode
+        size       int
+}
+
+func (l *SinglyLinkedList) TypeName() string <span class="cov8" title="1">{ return "SinglyLinkedList" }</span>
+func (l *SinglyLinkedList) Size() int        <span class="cov8" title="1">{ return l.size }</span>
+func (l *SinglyLinkedList) Clear()           <span class="cov8" title="1">{ l.head, l.tail, l.size = nil, nil, 0 }</span>
+
+func (l *SinglyLinkedList) PushFront(v string) <span class="cov8" title="1">{
+        n := &amp;singlyNode{value: v, next: l.head}
+        l.head = n
+        if l.tail == nil </span><span class="cov8" title="1">{
+                l.tail = n
+        }</span>
+        <span class="cov8" title="1">l.size++</span>
+}
+
+func (l *SinglyLinkedList) PushBack(v string) <span class="cov8" title="1">{
+        n := &amp;singlyNode{value: v}
+        if l.tail == nil </span><span class="cov8" title="1">{
+                l.head, l.tail = n, n
+        }</span> else<span class="cov8" title="1"> {
+                l.tail.next = n
+                l.tail = n
+        }</span>
+        <span class="cov8" title="1">l.size++</span>
+}
+
+func (l *SinglyLinkedList) find(v string) *singlyNode <span class="cov8" title="1">{
+        for n := l.head; n != nil; n = n.next </span><span class="cov8" title="1">{
+                if n.value == v </span><span class="cov8" title="1">{
+                        return n
+                }</span>
+        }
+        <span class="cov8" title="1">return nil</span>
+}
+
+func (l *SinglyLinkedList) Contains(v string) bool <span class="cov8" title="1">{ return l.find(v) != nil }</span>
+
+// InsertAfter вставляет value после первого вхождения target.
+func (l *SinglyLinkedList) InsertAfter(target, value string) bool <span class="cov8" title="1">{
+        t := l.find(target)
+        if t == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">t.next = &amp;singlyNode{value: value, next: t.next}
+        if l.tail == t </span><span class="cov8" title="1">{
+                l.tail = t.next
+        }</span>
+        <span class="cov8" title="1">l.size++
+        return true</span>
+}
+
+// InsertBefore вставляет value перед первым вхождением target.
+func (l *SinglyLinkedList) InsertBefore(target, value string) bool <span class="cov8" title="1">{
+        if l.head == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">if l.head.value == target </span><span class="cov8" title="1">{
+                l.PushFront(value)
+                return true
+        }</span>
+        <span class="cov8" title="1">for n := l.head; n.next != nil; n = n.next </span><span class="cov8" title="1">{
+                if n.next.value == target </span><span class="cov8" title="1">{
+                        n.next = &amp;singlyNode{value: value, next: n.next}
+                        l.size++
+                        return true
+                }</span>
+        }
+        <span class="cov8" title="1">return false</span>
+}
+
+func (l *SinglyLinkedList) PopFront() (string, error) <span class="cov8" title="1">{
+        if l.head == nil </span><span class="cov8" title="1">{
+                return "", ErrEmpty
+        }</span>
+        <span class="cov8" title="1">v := l.head.value
+        l.head = l.head.next
+        if l.head == nil </span><span class="cov8" title="1">{
+                l.tail = nil
+        }</span>
+        <span class="cov8" title="1">l.size--
+        return v, nil</span>
+}
+
+func (l *SinglyLinkedList) PopBack() (string, error) <span class="cov8" title="1">{
+        if l.head == nil </span><span class="cov8" title="1">{
+                return "", ErrEmpty
+        }</span>
+        <span class="cov8" title="1">if l.head == l.tail </span><span class="cov8" title="1">{
+                return l.PopFront()
+        }</span>
+        <span class="cov8" title="1">prev := l.head
+        for prev.next != l.tail </span><span class="cov0" title="0">{
+                prev = prev.next
+        }</span>
+        <span class="cov8" title="1">v := l.tail.value
+        prev.next = nil
+        l.tail = prev
+        l.size--
+        return v, nil</span>
+}
+
+// RemoveByValue удаляет первое вхождение value.
+func (l *SinglyLinkedList) RemoveByValue(v string) bool <span class="cov8" title="1">{
+        if l.head == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">if l.head.value == v </span><span class="cov8" title="1">{
+                _, _ = l.PopFront()
+                return true
+        }</span>
+        <span class="cov8" title="1">for n := l.head; n.next != nil; n = n.next </span><span class="cov8" title="1">{
+                if n.next.value == v </span><span class="cov8" title="1">{
+                        victim := n.next
+                        n.next = victim.next
+                        if victim == l.tail </span><span class="cov8" title="1">{
+                                l.tail = n
+                        }</span>
+                        <span class="cov8" title="1">l.size--
+                        return true</span>
+                }
+        }
+        <span class="cov8" title="1">return false</span>
+}
+
+// RemoveAfter удаляет элемент, следующий за target.
+func (l *SinglyLinkedList) RemoveAfter(target string) bool <span class="cov8" title="1">{
+        t := l.find(target)
+        if t == nil || t.next == nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">victim := t.next
+        t.next = victim.next
+        if victim == l.tail </span><span class="cov0" title="0">{
+                l.tail = t
+        }</span>
+        <span class="cov8" title="1">l.size--
+        return true</span>
+}
+
+// RemoveBefore удаляет элемент, стоящий перед target.
+func (l *SinglyLinkedList) RemoveBefore(target string) bool <span class="cov8" title="1">{
+        if l.head == nil || l.head.value == target </span><span class="cov8" title="1">{
+                return false
+        }</span>
+        <span class="cov8" title="1">if l.head.next != nil &amp;&amp; l.head.next.value == target </span><span class="cov8" title="1">{
+                _, _ = l.PopFront()
+                return true
+        }</span>
+        <span class="cov8" title="1">for n := l.head; n.next != nil &amp;&amp; n.next.next != nil; n = n.next </span><span class="cov8" title="1">{
+                if n.next.next.value == target </span><span class="cov8" title="1">{
+                        n.next = n.next.next
+                        l.size--
+                        return true
+                }</span>
+        }
+        <span class="cov8" title="1">return false</span>
+}
+
+func (l *SinglyLinkedList) GetAt(index int) (string, error) <span class="cov8" title="1">{
+        if index &lt; 0 || index &gt;= l.size </span><span class="cov8" title="1">{
+                return "", ErrIndex
+        }</span>
+        <span class="cov8" title="1">n := l.head
+        for i := 0; i &lt; index; i++ </span><span class="cov8" title="1">{
+                n = n.next
+        }</span>
+        <span class="cov8" title="1">return n.value, nil</span>
+}
+
+func (l *SinglyLinkedList) Front() (string, error) <span class="cov8" title="1">{
+        if l.head == nil </span><span class="cov8" title="1">{
+                return "", ErrEmpty
+        }</span>
+        <span class="cov8" title="1">return l.head.value, nil</span>
+}
+
+func (l *SinglyLinkedList) Back() (string, error) <span class="cov8" title="1">{
+        if l.tail == nil </span><span class="cov8" title="1">{
+                return "", ErrEmpty
+        }</span>
+        <span class="cov8" title="1">return l.tail.value, nil</span>
+}
+
+func (l *SinglyLinkedList) ToSlice() []string <span class="cov8" title="1">{
+        out := make([]string, 0, l.size)
+        for n := l.head; n != nil; n = n.next </span><span class="cov8" title="1">{
+                out = append(out, n.value)
+        }</span>
+        <span class="cov8" title="1">return out</span>
+}
+
+func (l *SinglyLinkedList) Append(v string) error <span class="cov8" title="1">{
+        l.PushBack(v)
+        return nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package ds
+
+// Stack - стек на основе односвязного списка (вершина - голова списка).
+type Stack struct{ list SinglyLinkedList }
+
+func (s *Stack) TypeName() string <span class="cov8" title="1">{ return "Stack" }</span>
+func (s *Stack) Size() int        <span class="cov8" title="1">{ return s.list.Size() }</span>
+func (s *Stack) Clear()           <span class="cov8" title="1">{ s.list.Clear() }</span>
+func (s *Stack) Push(v string)    <span class="cov8" title="1">{ s.list.PushFront(v) }</span>
+func (s *Stack) Pop() (string, error) <span class="cov8" title="1">{
+        return s.list.PopFront()
+}</span>
+func (s *Stack) Top() (string, error) <span class="cov8" title="1">{ return s.list.Front() }</span>
+
+// ToSlice возвращает элементы от дна к вершине.
+func (s *Stack) ToSlice() []string <span class="cov8" title="1">{
+        items := s.list.ToSlice()
+        for i, j := 0, len(items)-1; i &lt; j; i, j = i+1, j-1 </span><span class="cov8" title="1">{
+                items[i], items[j] = items[j], items[i]
+        }</span>
+        <span class="cov8" title="1">return items</span>
+}
+
+func (s *Stack) Append(v string) error <span class="cov8" title="1">{
+        s.Push(v)
+        return nil
+}</span>
+
+// Queue - очередь FIFO на односвязном списке с хвостом: Push и Pop за O(1).
+type Queue struct{ list SinglyLinkedList }
+
+func (q *Queue) TypeName() string       <span class="cov8" title="1">{ return "Queue" }</span>
+func (q *Queue) Size() int              <span class="cov8" title="1">{ return q.list.Size() }</span>
+func (q *Queue) Clear()                 <span class="cov8" title="1">{ q.list.Clear() }</span>
+func (q *Queue) Push(v string)          <span class="cov8" title="1">{ q.list.PushBack(v) }</span>
+func (q *Queue) Pop() (string, error)   <span class="cov8" title="1">{ return q.list.PopFront() }</span>
+func (q *Queue) Front() (string, error) <span class="cov8" title="1">{ return q.list.Front() }</span>
+func (q *Queue) ToSlice() []string      <span class="cov8" title="1">{ return q.list.ToSlice() }</span>
+func (q *Queue) Append(v string) error  <span class="cov8" title="1">{ q.Push(v); return nil }</span>
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package ds
+
+import (
+        "fmt"
+        "strconv"
+)
+
+type treeNode struct {
+        value       int
+        left, right *treeNode
+}
+
+// CompleteBinaryTree - полное двоичное дерево: уровни заполняются слева направо.
+type CompleteBinaryTree struct {
+        root *treeNode
+        size int
+}
+
+func (t *CompleteBinaryTree) TypeName() string <span class="cov8" title="1">{ return "CompleteBinaryTree" }</span>
+func (t *CompleteBinaryTree) Size() int        <span class="cov8" title="1">{ return t.size }</span>
+func (t *CompleteBinaryTree) Clear()           <span class="cov8" title="1">{ t.root, t.size = nil, 0 }</span>
+
+// Insert добавляет значение в первую свободную позицию (обход в ширину).
+func (t *CompleteBinaryTree) Insert(v int) <span class="cov8" title="1">{
+        n := &amp;treeNode{value: v}
+        t.size++
+        if t.root == nil </span><span class="cov8" title="1">{
+                t.root = n
+                return
+        }</span>
+        <span class="cov8" title="1">queue := []*treeNode{t.root}
+        for </span><span class="cov8" title="1">{
+                cur := queue[0]
+                queue = queue[1:]
+                if cur.left == nil </span><span class="cov8" title="1">{
+                        cur.left = n
+                        return
+                }</span>
+                <span class="cov8" title="1">if cur.right == nil </span><span class="cov8" title="1">{
+                        cur.right = n
+                        return
+                }</span>
+                <span class="cov8" title="1">queue = append(queue, cur.left, cur.right)</span>
+        }
+}
+
+func (t *CompleteBinaryTree) Find(v int) bool <span class="cov8" title="1">{
+        for _, x := range t.LevelOrder() </span><span class="cov8" title="1">{
+                if x == v </span><span class="cov8" title="1">{
+                        return true
+                }</span>
+        }
+        <span class="cov8" title="1">return false</span>
+}
+
+// IsComplete проверяет, что все уровни, кроме последнего, заполнены, а последний - слева направо.
+func (t *CompleteBinaryTree) IsComplete() bool <span class="cov8" title="1">{
+        queue := []*treeNode{t.root}
+        seenNil := false
+        for len(queue) &gt; 0 </span><span class="cov8" title="1">{
+                cur := queue[0]
+                queue = queue[1:]
+                if cur == nil </span><span class="cov8" title="1">{
+                        seenNil = true
+                        continue</span>
+                }
+                <span class="cov8" title="1">if seenNil </span><span class="cov8" title="1">{
+                        return false
+                }</span>
+                <span class="cov8" title="1">queue = append(queue, cur.left, cur.right)</span>
+        }
+        <span class="cov8" title="1">return true</span>
+}
+
+func height(n *treeNode) int <span class="cov8" title="1">{
+        if n == nil </span><span class="cov8" title="1">{
+                return -1
+        }</span>
+        <span class="cov8" title="1">l, r := height(n.left), height(n.right)
+        if r &gt; l </span><span class="cov0" title="0">{
+                l = r
+        }</span>
+        <span class="cov8" title="1">return l + 1</span>
+}
+
+// Height - высота дерева (-1 для пустого).
+func (t *CompleteBinaryTree) Height() int <span class="cov8" title="1">{ return height(t.root) }</span>
+
+func (t *CompleteBinaryTree) LevelOrder() []int <span class="cov8" title="1">{
+        var out []int
+        if t.root == nil </span><span class="cov8" title="1">{
+                return out
+        }</span>
+        <span class="cov8" title="1">queue := []*treeNode{t.root}
+        for len(queue) &gt; 0 </span><span class="cov8" title="1">{
+                cur := queue[0]
+                queue = queue[1:]
+                out = append(out, cur.value)
+                if cur.left != nil </span><span class="cov8" title="1">{
+                        queue = append(queue, cur.left)
+                }</span>
+                <span class="cov8" title="1">if cur.right != nil </span><span class="cov8" title="1">{
+                        queue = append(queue, cur.right)
+                }</span>
+        }
+        <span class="cov8" title="1">return out</span>
+}
+
+func walk(n *treeNode, order int, out *[]int) <span class="cov8" title="1">{
+        if n == nil </span><span class="cov8" title="1">{
+                return
+        }</span>
+        <span class="cov8" title="1">if order == 0 </span><span class="cov8" title="1">{ // pre
+                *out = append(*out, n.value)
+        }</span>
+        <span class="cov8" title="1">walk(n.left, order, out)
+        if order == 1 </span><span class="cov8" title="1">{ // in
+                *out = append(*out, n.value)
+        }</span>
+        <span class="cov8" title="1">walk(n.right, order, out)
+        if order == 2 </span><span class="cov8" title="1">{ // post
+                *out = append(*out, n.value)
+        }</span>
+}
+
+func (t *CompleteBinaryTree) PreOrder() []int  <span class="cov8" title="1">{ var o []int; walk(t.root, 0, &amp;o); return o }</span>
+func (t *CompleteBinaryTree) InOrder() []int   <span class="cov8" title="1">{ var o []int; walk(t.root, 1, &amp;o); return o }</span>
+func (t *CompleteBinaryTree) PostOrder() []int <span class="cov8" title="1">{ var o []int; walk(t.root, 2, &amp;o); return o }</span>
+
+func (t *CompleteBinaryTree) ToSlice() []string <span class="cov8" title="1">{
+        vals := t.LevelOrder()
+        out := make([]string, len(vals))
+        for i, v := range vals </span><span class="cov8" title="1">{
+                out[i] = strconv.Itoa(v)
+        }</span>
+        <span class="cov8" title="1">return out</span>
+}
+
+func (t *CompleteBinaryTree) Append(s string) error <span class="cov8" title="1">{
+        v, err := strconv.Atoi(s)
+        if err != nil </span><span class="cov8" title="1">{
+                return fmt.Errorf("ds: not an integer: %q", s)
+        }</span>
+        <span class="cov8" title="1">t.Insert(v)
+        return nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

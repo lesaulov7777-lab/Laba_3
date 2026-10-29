@@ -1,0 +1,6 @@
+cpp/build/
+cpp/build-cov/
+cpp/out/
+go/out/
+go/coverage.out
+.DS_Store
